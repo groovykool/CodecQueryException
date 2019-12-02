@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace CodecQueryException
 {
-  
+
   public sealed partial class MainPage : Page
   {
     public MainPage()
@@ -43,21 +43,31 @@ namespace CodecQueryException
     {
       var codecQuery = new CodecQuery();
       //IReadOnlyList<CodecInfo> result = await codecQuery.FindAllAsync(CodecKind.Video, CodecCategory.Encoder, "");
-      IReadOnlyList<CodecInfo> result = await codecQuery.FindAllAsync(CodecKind.Audio, CodecCategory.Decoder, "");
-      foreach (var codecInfo in result)
+      try
       {
-        TB.Text += "============================================================\n";
-        TB.Text += $"Codec: {codecInfo.DisplayName}\n";
-        TB.Text += $"Kind: {codecInfo.Kind}\n";
-        TB.Text += $"Category: {codecInfo.Category}\n";
-        TB.Text += $"Trusted: {codecInfo.IsTrusted}\n";
-
-        foreach (string subType in codecInfo.Subtypes)
+        IReadOnlyList<CodecInfo> result = await codecQuery.FindAllAsync(CodecKind.Audio, CodecCategory.Decoder, "");
+        foreach (var codecInfo in result)
         {
-          TB.Text += $"   Subtype: {subType}\n";
+          TB.Text += "============================================================\n";
+          TB.Text += $"Codec: {codecInfo.DisplayName}\n";
+          TB.Text += $"Kind: {codecInfo.Kind}\n";
+          TB.Text += $"Category: {codecInfo.Category}\n";
+          TB.Text += $"Trusted: {codecInfo.IsTrusted}\n";
 
+          foreach (string subType in codecInfo.Subtypes)
+          {
+            TB.Text += $"   Subtype: {subType}\n";
+
+          }
         }
       }
+      catch (Exception ex)
+      {
+        Debug.WriteLine($"Exception::{ex.Message}");
+      }
+
+
+     
 
     }
   }
